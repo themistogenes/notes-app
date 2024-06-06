@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { MdAdd } from 'react-icons/md';
 import Navbar from '../../components/Navbar/Navbar';
 import NoteCard from '../../components/Cards/NoteCard';
 import AddEditNotes from './AddEditNotes';
 import Modal from 'react-modal';
+import axiosInstance from '../../utils/axiosInstance';
 
 const Home = () => {
   const [openAddEditModal, setOpenAddEditModal] = useState({
@@ -12,9 +14,33 @@ const Home = () => {
     data: null
   });
 
+  const [userInfo, setUserInfo] = useState(null);
+
+  const navigate = useNavigate();
+
+  // Get User Info
+  const getUserInfo = async () => {
+    try {
+      const res = await axiosInstance.get('/get-user');
+      if (res.data && res.data.user) {
+        setUserInfo(res.data.user);
+      }
+    } catch (error) {
+      if (error.res.status === 401) {
+        localStorage.clear();
+        navigate('/login');
+      }
+    }
+  }
+
+  useEffect(() => {
+    getUserInfo();
+    return () => {};
+  }, [])
+
   return (
     <>
-    <Navbar />
+    <Navbar userInfo={userInfo} />
     <div className="container mx-auto">
       <div className="grid grid-cols-3 gap-4 mt-8">
         <NoteCard 
