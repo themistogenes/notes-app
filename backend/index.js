@@ -3,7 +3,7 @@ require('dotenv').config();
 const config = require('./config.json');
 const mongoose = require('mongoose');
 
-mongoose.connect(config.connectionString);
+mongoose.connect(config.connectionString).then(console.log('App connected to DB'));
 
 const User = require('./models/user.model.js');
 
@@ -72,6 +72,8 @@ app.post('/create-account', async (req, res) => {
   })
 })
 
-app.listen(8000);
+app.listen(8000, () => {
+  console.log('Server is running on port 8000');
+});
 
 module.exports = app;
