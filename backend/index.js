@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 mongoose.connect(config.connectionString).then(console.log('App connected to DB'));
 
 const User = require('./models/user.model.js');
+const Note = require('./models/note.model.js');
 
 const express = require('express');
 const cors = require('cors');
@@ -106,6 +107,11 @@ app.post('/login', async (req, res) => {
     return res.status(400).json({ error: true, message: 'Invalid credentials'});
   }
 })
+
+// Add Note
+app.post('/add-note', authenticateToken, async (req, res) => {
+
+} )
 
 app.listen(8000, () => {
   console.log('Server is running on port 8000');
