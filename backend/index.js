@@ -24,6 +24,29 @@ app.get('/', (req, res) => {
   res.json({ data: 'hello' });
 })
 
+// Create Account
+app.post('/create-account', async (req, res) => {
+  const { fullName, email, password } = req.body;
+
+  if (!fullName) {
+    return res
+      .status(400)
+      .json({ error: true, message: 'Full name is required'});
+  }
+
+  if (!email) {
+    return res
+      .status(400)
+      .json({ error: true, message: 'Email is required'});
+  }
+
+  if (!password) {
+    return res
+      .status(400)
+      .json({ error: true, message: 'Password is required'});
+  }
+})
+
 app.listen(8000);
 
 module.exports = app;
