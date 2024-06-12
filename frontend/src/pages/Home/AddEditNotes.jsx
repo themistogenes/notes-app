@@ -4,9 +4,9 @@ import TagInput from '../../components/Input/TagInput';
 import axiosInstance from '../../utils/axiosInstance';
 
 const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
-  const [tags, setTags] = useState([]);
+  const [title, setTitle] = useState(noteData?.title || '');
+  const [content, setContent] = useState(noteData?.content || '');
+  const [tags, setTags] = useState(noteData?.tags || []);
   const [error, setError] = useState(null);
 
   // Add Note
@@ -34,7 +34,27 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
 
   // Edit Note
   const editNote = async () => {
-    
+    const noteId = noteData._id;
+
+    try {
+      const res = await axiosInstance.put('/edit-note/' + noteId, {
+        title,
+        content,
+        tags
+      })
+
+      if (res.data && res.data.note) {
+        getAllNotes();
+        onClose();
+      }
+    } catch (error) {
+      if (
+        error.response && 
+        error.response.data && 
+        error.response.data.message) {
+          setError(error.response.data.message);
+      }   
+    }
   }
 
   const handleAddNote = () => {
@@ -103,7 +123,7 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
         className="btn-primary font-medium mt-5 p-3"
         onClick={handleAddNote}
       >
-        ADD
+        {type === 'edit' ? 'UPDATE' : 'ADD'}
       </button>
 
     </div>
