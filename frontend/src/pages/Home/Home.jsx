@@ -107,6 +107,7 @@ const Home = () => {
             data: null
           })
         }}
+        getAllNotes={getAllNotes}
       />
     </Modal>
     </>
