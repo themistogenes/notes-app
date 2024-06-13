@@ -25,6 +25,8 @@ const Home = () => {
   const [userInfo, setUserInfo] = useState(null);
   const [allNotes, setAllNotes] = useState([]);
 
+  const [isSearch, setIsSearch] = useState(false);
+
   const navigate = useNavigate();
 
   const handleEdit = (noteDetails) => {
@@ -100,6 +102,27 @@ const Home = () => {
     }
   }
 
+  // Search Notes
+  const onSearchNote = async (query) => {
+    try {
+      const res = await axiosInstance.get('/search-notes', {
+        params: { query }
+      })
+
+      if (res.data && res.data.notes) {
+        setIsSearch(true);
+        setAllNotes(res.data.notes);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const handleClearSearch = () => {
+    setIsSearch(false);
+    getAllNotes();
+  }
+
   useEffect(() => {
     getUserInfo();
     getAllNotes();
@@ -108,7 +131,11 @@ const Home = () => {
 
   return (
     <>
-      <Navbar userInfo={userInfo} />
+      <Navbar 
+        userInfo={userInfo} 
+        onSearchNote={onSearchNote} 
+        handleClearSearch={handleClearSearch} 
+      />
 
       <div className="container mx-auto">
         {
@@ -131,7 +158,9 @@ const Home = () => {
               }
             </div>
           ) : (
-            <EmptyCard />
+            <EmptyCard 
+              message={isSearch ? ('Oops! No notes found matching your search.') : ('Click the \"add\" button to make your first note.')}
+            />
           )
         }
 
