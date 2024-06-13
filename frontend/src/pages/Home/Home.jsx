@@ -103,7 +103,7 @@ const Home = () => {
   }
 
   // Search Notes
-  const onSearchNote = async (query) => {
+  const handleSearch = async (query) => {
     try {
       const res = await axiosInstance.get('/search-notes', {
         params: { query }
@@ -133,7 +133,7 @@ const Home = () => {
     <>
       <Navbar 
         userInfo={userInfo} 
-        onSearchNote={onSearchNote} 
+        handleSearch={handleSearch} 
         handleClearSearch={handleClearSearch} 
       />
 
@@ -183,7 +183,7 @@ const Home = () => {
           }
         }}
         contentLabel=""
-        className="w-[40%] max-h-3/4 bg-white rounded-md mx-auto mt-14 p-5 overflow-scroll"
+        className="w-[40%] max-h-3/4 bg-white rounded-md mx-auto mt-14 p-5 overflow-y-scroll"
       >
         <AddEditNotes 
           type={openAddEditModal.type}
