@@ -75,7 +75,28 @@ const Home = () => {
     } catch (error) {
       console.log('An unexpected error occurred. Please try again.');
     }
+  }
 
+  // Delete Note
+  const deleteNote = async (data) => {
+    const noteId = data._id;
+
+    try {
+      const res = await axiosInstance.delete('/delete-note/' + noteId);
+
+      if (res.data && !res.data.error) {
+        showToastMessage('Note deleted successfully', 'delete');
+        getAllNotes();
+      }
+    } catch (error) {
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
+        console.log('An unexpected error occurred. Please try again.');
+      }
+    }
   }
 
   useEffect(() => {
@@ -100,7 +121,7 @@ const Home = () => {
                 tags={item.tags}
                 isPinned={item.isPinned}
                 onEdit={() => handleEdit(item)}
-                onDelete={() => {}}
+                onDelete={() => deleteNote(item)}
                 onPinNote={() => {}}
               />
             ))
